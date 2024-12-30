@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="icon" href="gammainterpharm brandin main logo x2.jpg" type="gammainterpharm brandin main logo x2.jpg">
+    <style>
+        /* Your CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .login-container img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .signup-container {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .signup-container input[type="text"],
+        .signup-container input[type="email"],
+        .signup-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .signup-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .signup-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 8px;
+            background-color: blue;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        .close-btn{
+                background: transparent;
+                border: 0px;
+                cursor: pointer;
+                text-decoration: underline;
+        }
+
+        .sign-in-btn{
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <img src="gammainterpharm brandin main logo x2.jpg" alt="Login Image">
+        <form id="login-form">
+            <input type="text" name="username" placeholder="Username (Email)" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+        <button onclick="toggleSignup()"  class="sign-in-btn">Sign Up</button>
+    </div>
+
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form action="signup.php" method="post">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Sign Up" >
+
+            <p>Need Login?  <button onclick="showLogin()" class="close-btn">Click here!</button></p>
+        </form>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of the signup form
+        function toggleSignup() {
+            var signupContainer = document.querySelector('.signup-container');
+               var loginContainer = document.querySelector('.login-container');
+            if (signupContainer.style.display === 'none' || signupContainer.style.display === '') {
+                signupContainer.style.display = 'block';
+                loginContainer.style.display="none"
+
+            } else {
+                signupContainer.style.display = 'none';
+                  loginContainer.style.display="block";
+
+            }
+        }
+
+        function showLogin(){
+             var signupContainer = document.querySelector('.signup-container');
+            var loginContainer = document.querySelector('.login-container');
+
+            if (signupContainer.style.display === 'block') {
+                signupContainer.style.display = 'none';
+                loginContainer.style.display="block"
+
+            } 
+        }
+
+        // Handle the login form submission with JavaScript (AJAX)
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form from submitting the traditional way
+
+            // Capture the form data
+            const formData = new FormData(this);
+
+            // Send POST request using Fetch API
+            fetch('login.php', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json()) // Convert response to JSON
+            .then(data => {
+                if (data.status === 'success') {
+                    // Store the user data (such as id, name, email, role) in localStorage
+                    localStorage.setItem('user', JSON.stringify(data.data));
+
+                    // You can access the user data later in other pages as follows:
+                    // let user = JSON.parse(localStorage.getItem('user'));
+
+                    // alert('Login successful!');
+                    window.location.href = 'http://localhost:8080/helpdesk/test10.php';
+                    // Optionally, redirect the user to a different page
+                    // window.location.href = 'dashboard.html'; 
+                } else {
+                    // If the login fails, show the error message
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.log('Login error:', error);
+                alert('An error occurred during login.');
+            });
+        });
+    </script>
+
+    <!-- cookie creating script -->
+    <script>
+      document.getElementById('login-form').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent form from submitting the traditional way
+
+    // Capture the form data
+    const formData = new FormData(this);
+
+    // Send POST request using Fetch API
+    fetch('login.php', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+    })
+    .then(response => response.json()) // Convert response to JSON
+    .then(data => {
+        if (data.status === 'success') {
+            // Store the user data in localStorage (optional)
+            localStorage.setItem('user', JSON.stringify(data.data));
+
+            // Set a cookie with user details (example: userId and role)
+            const userId = data.data.id; // Assuming response contains user id
+            const userRole = data.data.role; // Assuming response contains user role
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (7 * 24 * 60 * 60 * 1000)); // Cookie expires in 7 days
+
+            document.cookie = `userId=${userId}; expires=${expires.toUTCString()}; path=/`;
+            document.cookie = `userRole=${userRole}; expires=${expires.toUTCString()}; path=/`;
+
+            // alert('Login successful!');
+            window.location.href = 'http://localhost:8080/helpdesk/test10.php';
+        } else {
+            // If the login fails, show the error message
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.log('Login error:', error);
+        alert('An error occurred during login.');
+    });
+});
+
+    </script>
+</body>
+</html>
